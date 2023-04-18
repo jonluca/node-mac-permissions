@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     name: Build
-    strategy:
-      matrix:
-        arch: ['x64', 'arm64']
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,12 +15,18 @@ jobs:
         with:
           node-version: 18
       - run: yarn install --frozen-lockfile
-      - run: yarn build -- -a ${{matrix.arch}}
+      - run: yarn build -- -a x64
       - run: yarn test
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: permissions-${{matrix.arch}}
+          name: permissions-x64
+          path: build/Release/permissions.node
+      - run: yarn build -- -a arm64
+      - name: Upload artifact arm64
+        uses: actions/upload-artifact@v3
+        with:
+          name: permissions-arm64
           path: build/Release/permissions.node
 
   release:
