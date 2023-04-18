@@ -1,6 +1,6 @@
 {
-  "name": "node-mac-permissions",
-  "version": "2.3.0",
+  "name": "node-electron-permissions",
+  "version": "0.0.0-development",
   "description": "A native node module to manage system permissions on macOS",
   "main": "index.js",
   "types": "index.d.ts",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codebytere/node-mac-permissions.git"
+    "url": "git+https://github.com/jonluca/node-mac-permissions.git"
   },
   "keywords": [
     "permissions",
@@ -26,21 +26,21 @@
   "author": "Shelley Vohr <shelley.vohr@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codebytere/node-mac-permissions/issues"
+    "url": "https://github.com/jonluca/node-mac-permissions/issues"
   },
-  "homepage": "https://github.com/codebytere/node-mac-permissions#readme",
+  "homepage": "https://github.com/jonluca/node-mac-permissions#readme",
   "dependencies": {
     "bindings": "^1.5.0",
-    "node-addon-api": "^3.0.2"
+    "node-addon-api": "^6.0.0"
   },
   "devDependencies": {
-    "chai": "^4.3.6",
+    "chai": "^4.3.7",
     "clang-format": "1.8.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^12.4.1",
-    "mocha": "^10.0.0",
-    "node-gyp": "^9.0.0",
-    "prettier": "^2.6.2"
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
+    "mocha": "^10.2.0",
+    "node-gyp": "^9.3.1",
+    "prettier": "^2.8.7"
   },
   "lint-staged": {
     "*.js": [

@@ -1,0 +1,62 @@
+name: Release npm package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    strategy:
+      matrix:
+        arch: ['x64', 'arm64']
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: yarn install --frozen-lockfile
+      - run: yarn build -- -a ${{matrix.arch}}
+      - run: yarn test
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: permissions-${{matrix.arch}}
+          path: build/Release/permissions.node
+
+  release:
+    name: Release
+    runs-on: macOS-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Create directories
+        run: |
+          mkdir -p build/Release
+          mkdir -p /tmp/artifacts/x64
+          mkdir -p /tmp/artifacts/arm64
+      - name: Download x64 artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: permissions-x64
+          path: /tmp/artifacts/x64
+      - name: Download arm64 artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: permissions-arm64
+          path: /tmp/artifacts/arm64
+      - name: Build universal binary
+        run: |
+          lipo /tmp/artifacts/x64/permissions.node /tmp/artifacts/arm64/permissions.node -create -output build/Release/permissions.node
+          lipo -info build/Release/permissions.node
+      - run: npx semantic-release --branches main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
