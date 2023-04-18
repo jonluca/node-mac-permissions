@@ -15,6 +15,14 @@
     "type": "git",
     "url": "git+https://github.com/jonluca/node-mac-permissions.git"
   },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "permissions.mm",
+    "binding.gyp",
+    "package.json",
+    "yarn.lock"
+  ],
   "keywords": [
     "permissions",
     "macos",
