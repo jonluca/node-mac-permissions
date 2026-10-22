@@ -10,24 +10,28 @@ jobs:
     name: Build
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7
         with:
           node-version: "26.12.1"
+      - name: Install Yarn Classic
+        run: npm install --global yarn@1.22.22 --force
       - run: yarn install --frozen-lockfile
-      - run: yarn build -- -a x64
+      # Test the runner-native binary before producing cross-architecture artifacts.
+      - run: yarn build
       - run: yarn test
+      - run: yarn build -- -a x64
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: permissions-x64
           path: build/Release/permissions.node
       - run: yarn build -- -a arm64
       - name: Upload artifact arm64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: permissions-arm64
           path: build/Release/permissions.node
@@ -38,13 +42,15 @@ jobs:
     needs:
       - build
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7
         with:
           node-version: "26.12.1"
+      - name: Install Yarn Classic
+        run: npm install --global yarn@1.22.22 --force
 
       - name: Create directories
         run: |
@@ -52,12 +58,12 @@ jobs:
           mkdir -p /tmp/artifacts/x64
           mkdir -p /tmp/artifacts/arm64
       - name: Download x64 artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
           name: permissions-x64
           path: /tmp/artifacts/x64
       - name: Download arm64 artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
           name: permissions-arm64
           path: /tmp/artifacts/arm64
